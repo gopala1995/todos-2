@@ -4,12 +4,15 @@ export const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [text, setText] = useState("");
 
+
   useEffect(() => {
     fetch("http://localhost:3001/users")
       .then((d) => d.json())
       .then((res) => {
         setTodos(res);
+        console.log(res);
       });
+      
   },[]);
 
   return (
@@ -37,8 +40,11 @@ export const Todos = () => {
       >
         Add Todos
       </button>
+      <div>
+          {console.log(todos)}
+      </div>
       {todos.map((e) => {
-        <div>
+        return <div>
           {e.title} - {e.status ? "Done" : "Not done"}
           hello
         </div>;
