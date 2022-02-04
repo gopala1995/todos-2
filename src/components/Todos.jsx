@@ -3,17 +3,22 @@ import { useEffect, useState } from "react";
 export const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [text, setText] = useState("");
+  const [page,setPage] = useState(1)
 
 
   useEffect(() => {
-    fetch("http://localhost:3001/users")
+    getData()
+  },[page]);
+
+  const getData=()=>{
+    fetch(`http://localhost:3001/users?_page=${page}&_limit=3`)
       .then((d) => d.json())
       .then((res) => {
         setTodos(res);
         console.log(res);
       });
       
-  },[]);
+  }
 
   return (
     <div>
@@ -34,7 +39,7 @@ export const Todos = () => {
             headers: {
               "content-type": "application/json",
             },
-          });
+          }).then(getData)
           // setTodos([...todos,{title:text,status:false}])
         }}
       >
@@ -46,9 +51,17 @@ export const Todos = () => {
       {todos.map((e) => {
         return <div>
           {e.title} - {e.status ? "Done" : "Not done"}
-          hello
+          
+          
         </div>;
       })}
+      <button onClick={()=>{
+            setPage(page-1)
+          }}>Prev</button>
+
+          <button onClick={()=>{
+            setPage(page+1)
+          }}>Next</button>
     </div>
   );
 };
